@@ -1,0 +1,96 @@
+<div class="bg-gray-100 dark:bg-gray-900 py-10 px-12">
+  <form [formGroup]="searchForm">
+    <label
+      for="default-search"
+      class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-gray-300"
+      >Search</label
+    >
+    <div class="relative">
+      <div
+        class="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none"
+      >
+        <svg
+          aria-hidden="true"
+          class="w-5 h-5 text-gray-500 dark:text-gray-400"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+          ></path>
+        </svg>
+      </div>
+      <input
+        type="search"
+        id="default-search"
+        class="block p-4 pl-10 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+        placeholder="Search Gif"
+        formControlName="query"
+        autocomplete="off"
+      />
+      <button
+        type="submit"
+        class="text-white absolute right-2.5 bottom-2.5 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+      >
+        Search
+      </button>
+    </div>
+  </form>
+
+  <!-- gifs section -->
+  <ng-container *ngIf="!loading; else loadingTemp">
+    <div
+      class="grid grid-flow-row gap-8 text-neutral-600 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+    >
+      <ng-container *ngIf="gifs.length">
+        <ng-container *ngFor="let gif of gifs">
+          <div
+            class="my-8 rounded shadow-lg shadow-gray-200 dark:shadow-gray-900 bg-white dark:bg-gray-800 duration-300 hover:-translate-y-1 group cursor-pointer"
+          >
+            <img
+              [src]="gif.images?.original?.url"
+              class="rounded-t h-72 w-full object-cover"
+            />
+
+            <div class="p-4 relative">
+              <button (click)="gif.seeDetail = !gif.seeDetail">
+                {{ gif.seeDetail ? "See less" : "See Detail" }}
+              </button>
+
+              <div
+                *ngIf="gif.seeDetail"
+                class="absolute bg-white p-4 pt-0 left-0 top-[50px] w-full"
+              >
+                <p
+                  class="text-lg mb-4 font-bold leading-relaxed text-gray-800 dark:text-gray-300"
+                >
+                  {{ gif.title }}
+                </p>
+
+                <div class="flex justify-between">
+                  <p class="leading-5 text-gray-500 dark:text-gray-400">
+                    Username: {{ gif.username }}
+                  </p>
+                  <p class="leading-5 text-gray-500 dark:text-gray-400">
+                    Rating: {{ gif.rating }}
+                  </p>
+                </div>
+
+                <p class="leading-5 text-gray-500 dark:text-gray-400">
+                  {{ gif.import_datetime | date: "shortDate" }}
+                </p>
+              </div>
+            </div>
+          </div>
+        </ng-container>
+      </ng-container>
+    </div>
+  </ng-container>
+
+  <ng-template #loadingTemp> Gifs Loading... </ng-template>
+</div>
